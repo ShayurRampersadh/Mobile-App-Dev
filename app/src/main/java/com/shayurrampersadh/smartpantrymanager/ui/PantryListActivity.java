@@ -10,7 +10,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.shayurrampersadh.smartpantrymanager.R;
 
-public class PantryListActivty extends AppCompatActivity {
+public class PantryListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
