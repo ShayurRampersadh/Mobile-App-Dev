@@ -96,5 +96,33 @@ public class PantryDao {
         return rowsAffected;
     }
 
+    public PantryItem getById(int id){
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        PantryItem item = null;
+
+        Cursor cursor = db.query(
+                PantryDbHelper.TABLE_PANTRY,
+                null,
+                PantryDbHelper.COL_PANTRY_ID + " = ?",
+                new String[]{String.valueOf(id)},
+                null,
+                null,
+                null
+        );
+
+        if (cursor.moveToFirst()){
+            String name = cursor.getString(cursor.getColumnIndexOrThrow(PantryDbHelper.COL_PANTRY_NAME));
+            double quantity = cursor.getDouble(cursor.getColumnIndexOrThrow(PantryDbHelper.COL_QUANTITY));
+            String unit = cursor.getString(cursor.getColumnIndexOrThrow(PantryDbHelper.COL_UNIT));
+            String expiry = cursor.getString(cursor.getColumnIndexOrThrow(PantryDbHelper.COL_EXPIRY_DATE));
+
+            item = new PantryItem(id, name, quantity, unit, expiry);
+        }
+
+        cursor.close();
+        db.close();
+        return item;
+    }
+
 
 }
