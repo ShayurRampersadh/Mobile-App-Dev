@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.shayurrampersadh.smartpantrymanager.R;
+import com.shayurrampersadh.smartpantrymanager.data.DbSeeder;
 import com.shayurrampersadh.smartpantrymanager.data.PantryDao;
+import com.shayurrampersadh.smartpantrymanager.data.RecipeDao;
 import com.shayurrampersadh.smartpantrymanager.model.PantryItem;
 
 import java.util.List;
@@ -28,6 +30,9 @@ public class PantryListActivity extends AppCompatActivity implements PantryAdapt
         setContentView(R.layout.activity_pantry_list);
 
         pantryDao = new PantryDao(this);
+
+        new DbSeeder(this).seedIfEmpty();
+
         recyclerView = findViewById(R.id.rvPantryList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 

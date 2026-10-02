@@ -2,21 +2,21 @@ package com.shayurrampersadh.smartpantrymanager.model;
 
 public class RecipeIngredient {
 
-    private int recipeIngredient;
+    private int recipeId;
     private String ingredientName;
     private double requiredQuantity;
     private String unit;
 
-    public RecipeIngredient(int recipeIngredient, String ingredientName,
+    public RecipeIngredient(int recipeId, String ingredientName,
                             double requiredQuantity, String unit){
-        this.recipeIngredient = recipeIngredient;
+        this.recipeId = recipeId;
         this.ingredientName = ingredientName;
         this.unit = unit;
         this.requiredQuantity = requiredQuantity;
     }
 
-    public int getRecipeIngredient(){
-        return recipeIngredient;
+    public int getRecipeId(){
+        return recipeId;
     }
 
     public String getIngredientName(){
