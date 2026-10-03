@@ -32,6 +32,7 @@ public class PantryListActivity extends AppCompatActivity implements PantryAdapt
         pantryDao = new PantryDao(this);
 
         new DbSeeder(this).seedIfEmpty();
+        android.util.Log.d("SeedCheck", "Recipe count: " + new RecipeDao(this).getCount());
 
         recyclerView = findViewById(R.id.rvPantryList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
