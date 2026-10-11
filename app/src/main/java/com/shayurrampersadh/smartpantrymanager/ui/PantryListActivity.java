@@ -14,6 +14,7 @@ import com.shayurrampersadh.smartpantrymanager.data.PantryDao;
 import com.shayurrampersadh.smartpantrymanager.data.RecipeDao;
 import com.shayurrampersadh.smartpantrymanager.model.PantryItem;
 
+
 import java.util.List;
 
 public class PantryListActivity extends AppCompatActivity implements PantryAdapter.OnItemActionListener {
@@ -32,7 +33,6 @@ public class PantryListActivity extends AppCompatActivity implements PantryAdapt
         pantryDao = new PantryDao(this);
 
         new DbSeeder(this).seedIfEmpty();
-        android.util.Log.d("SeedCheck", "Recipe count: " + new RecipeDao(this).getCount());
 
         recyclerView = findViewById(R.id.rvPantryList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -44,7 +44,10 @@ public class PantryListActivity extends AppCompatActivity implements PantryAdapt
             Intent intent = new Intent(this, AddEditIngredientActivity.class);
             startActivity(intent);
         });
+
     }
+
+
 
     @Override
     protected void onResume() {
