@@ -6,12 +6,12 @@ public class MatchResult {
 
     private Recipe recipe;
     private int missingCount;
-    private List<String> missingIngredient;
+    private List<String> missingIngredients;
 
-    public MatchResult(Recipe recipe, int missingCount, List missingIngredient){
+    public MatchResult(Recipe recipe, int missingCount, List<String> missingIngredients){
         this.recipe = recipe;
         this.missingCount = missingCount;
-        this.missingIngredient = missingIngredient;
+        this.missingIngredients = missingIngredients;
     }
 
     public Recipe getRecipe(){
@@ -22,9 +22,8 @@ public class MatchResult {
         return missingCount;
     }
 
-    public List getMissingIngredient(){
-        return missingIngredient;
+    public List<String> getMissingIngredients(){
+        return missingIngredients;
     }
-
 
 }

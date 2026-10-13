@@ -22,6 +22,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.SuggestedRecipesActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.AddEditIngredientActivity"
             android:exported="false" />
     </application>
