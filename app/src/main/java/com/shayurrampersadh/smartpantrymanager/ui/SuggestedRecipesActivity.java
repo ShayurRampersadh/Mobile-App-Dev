@@ -1,5 +1,6 @@
 package com.shayurrampersadh.smartpantrymanager.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -95,7 +96,9 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
     }
 
     private void openRecipeDetail(MatchResult matchResult) {
-        // we'll wire this to RecipeDetailActivity in Step 8
+        Intent intent = new Intent(this, RecipeDetailActivity.class);
+        intent.putExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, matchResult.getRecipe().getId());
+        startActivity(intent);
     }
 
 }
