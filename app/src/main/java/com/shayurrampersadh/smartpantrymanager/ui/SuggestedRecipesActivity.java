@@ -18,6 +18,7 @@ import com.shayurrampersadh.smartpantrymanager.matching.RecipeMatcher;
 import com.shayurrampersadh.smartpantrymanager.model.MatchResult;
 import com.shayurrampersadh.smartpantrymanager.model.PantryItem;
 import com.shayurrampersadh.smartpantrymanager.model.Recipe;
+import com.shayurrampersadh.smartpantrymanager.util.NavigationHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +54,8 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
         rvAlmostThere.setLayoutManager(new LinearLayoutManager(this));
 
         loadSuggestions();
+
+        NavigationHelper.setupNavBar(this);
     }
 
     @Override

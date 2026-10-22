@@ -13,6 +13,7 @@ import com.shayurrampersadh.smartpantrymanager.data.DbSeeder;
 import com.shayurrampersadh.smartpantrymanager.data.PantryDao;
 import com.shayurrampersadh.smartpantrymanager.data.RecipeDao;
 import com.shayurrampersadh.smartpantrymanager.model.PantryItem;
+import com.shayurrampersadh.smartpantrymanager.util.NavigationHelper;
 
 
 import java.util.List;
@@ -45,6 +46,7 @@ public class PantryListActivity extends AppCompatActivity implements PantryAdapt
             startActivity(intent);
         });
 
+        NavigationHelper.setupNavBar(this);
     }
 
 
