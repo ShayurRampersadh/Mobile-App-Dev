@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.shayurrampersadh.smartpantrymanager.R;
 import com.shayurrampersadh.smartpantrymanager.model.PantryItem;
+import com.shayurrampersadh.smartpantrymanager.util.IngredientNormalizer;
 
 import java.util.List;
 
@@ -62,8 +63,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
         PantryItem item = pantryItems.get(position);
 
         holder.tvItemName.setText(item.getName());
-        holder.tvItemQuantity.setText(item.getQuantity() + " " + item.getUnit());
-        holder.tvItemExpiry.setText(item.getExpiryDate() != null ? "Expires: " + item.getExpiryDate() : "");
+        holder.tvItemQuantity.setText(IngredientNormalizer.formatQuantity(item.getQuantity()) + " " + item.getUnit());        holder.tvItemExpiry.setText(item.getExpiryDate() != null ? "Expires: " + item.getExpiryDate() : "");
 
         holder.btnEdit.setOnClickListener(v -> listener.onEdit(item));
         holder.btnDelete.setOnClickListener(v -> listener.onDelete(item));

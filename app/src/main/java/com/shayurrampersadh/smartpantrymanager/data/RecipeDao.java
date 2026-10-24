@@ -62,4 +62,28 @@ public class RecipeDao {
         db.close();
         return count;
     }
+
+    public Recipe getById(int id) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Recipe recipe = null;
+
+        Cursor cursor = db.query(
+                PantryDbHelper.TABLE_RECIPES,
+                null,
+                PantryDbHelper.COL_RECIPE_ID + " = ?",
+                new String[]{String.valueOf(id)},
+                null, null, null
+        );
+
+        if (cursor.moveToFirst()) {
+            String name = cursor.getString(cursor.getColumnIndexOrThrow(PantryDbHelper.COL_RECIPE_NAME));
+            String steps = cursor.getString(cursor.getColumnIndexOrThrow(PantryDbHelper.COL_RECIPE_STEPS));
+
+            recipe = new Recipe(id, name, steps);
+        }
+
+        cursor.close();
+        db.close();
+        return recipe;
+    }
 }

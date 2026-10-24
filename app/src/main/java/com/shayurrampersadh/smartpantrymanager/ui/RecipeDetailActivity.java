@@ -8,6 +8,8 @@ import com.shayurrampersadh.smartpantrymanager.data.RecipeDao;
 import com.shayurrampersadh.smartpantrymanager.data.RecipeIngredientsDao;
 import com.shayurrampersadh.smartpantrymanager.model.Recipe;
 import com.shayurrampersadh.smartpantrymanager.model.RecipeIngredient;
+import com.shayurrampersadh.smartpantrymanager.util.IngredientNormalizer;
+
 import java.util.List;
 
 public class RecipeDetailActivity extends AppCompatActivity {
@@ -24,13 +26,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         RecipeDao recipeDao = new RecipeDao(this);
         RecipeIngredientsDao recipeIngredientsDao = new RecipeIngredientsDao(this);
 
-        Recipe recipe = null;
-        for (Recipe r : recipeDao.getAll()) {
-            if (r.getId() == recipeId) {
-                recipe = r;
-                break;
-            }
-        }
+        Recipe recipe = recipeDao.getById(recipeId);
 
         if (recipe == null) {
             finish();
@@ -48,7 +44,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         StringBuilder ingredientsText = new StringBuilder();
         for (RecipeIngredient ingredient : ingredients) {
             ingredientsText.append("• ")
-                    .append(ingredient.getRequiredQuantity())
+                    .append(IngredientNormalizer.formatQuantity(ingredient.getRequiredQuantity()))
                     .append(" ")
                     .append(ingredient.getUnit())
                     .append(" ")

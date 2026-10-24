@@ -14,5 +14,15 @@ public class IngredientNormalizer {
         }
         return normalized;
 
+
+
+    }
+
+    public static String formatQuantity(double quantity) {
+        if (quantity == Math.floor(quantity)) {
+            return String.valueOf((int) quantity);
+        } else {
+            return String.valueOf(quantity);
+        }
     }
 }

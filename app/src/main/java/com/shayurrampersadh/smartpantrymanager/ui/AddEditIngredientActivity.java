@@ -83,9 +83,18 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         }
 
         if (itemId == -1) {
-            PantryItem newItem = new PantryItem(0, name, quantity, unit, expiry);
-            pantryDao.insert(newItem);
-            Toast.makeText(this, "Item added", Toast.LENGTH_SHORT).show();
+            PantryItem existing = pantryDao.getByName(name);
+
+            if (existing != null) {
+                double combinedQuantity = existing.getQuantity() + quantity;
+                PantryItem merged = new PantryItem(existing.getId(), existing.getName(), combinedQuantity, unit, expiry);
+                pantryDao.update(merged);
+                Toast.makeText(this, "Quantity updated", Toast.LENGTH_SHORT).show();
+            } else {
+                PantryItem newItem = new PantryItem(0, name, quantity, unit, expiry);
+                pantryDao.insert(newItem);
+                Toast.makeText(this, "Item added", Toast.LENGTH_SHORT).show();
+            }
         } else {
             PantryItem updatedItem = new PantryItem(itemId, name, quantity, unit, expiry);
             pantryDao.update(updatedItem);
