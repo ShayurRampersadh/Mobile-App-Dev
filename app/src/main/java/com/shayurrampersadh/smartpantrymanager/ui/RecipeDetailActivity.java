@@ -1,8 +1,11 @@
 package com.shayurrampersadh.smartpantrymanager.ui;
 
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.shayurrampersadh.smartpantrymanager.R;
 import com.shayurrampersadh.smartpantrymanager.data.RecipeDao;
 import com.shayurrampersadh.smartpantrymanager.data.RecipeIngredientsDao;
@@ -38,6 +41,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         TextView tvName = findViewById(R.id.tvDetailRecipeName);
         TextView tvIngredients = findViewById(R.id.tvIngredientsList);
         TextView tvSteps = findViewById(R.id.tvStepsText);
+        Button btnBack = findViewById(R.id.btnBack);
 
         tvName.setText(recipe.getName());
 
@@ -53,7 +57,17 @@ public class RecipeDetailActivity extends AppCompatActivity {
         }
         tvIngredients.setText(ingredientsText.toString());
 
-        tvSteps.setText(recipe.getPrepSteps());
+        String[] stepParts = recipe.getPrepSteps().trim().split("(?=\\d+\\.\\s)");
+        StringBuilder formattedSteps = new StringBuilder();
+        for (String step : stepParts) {
+            String trimmedStep = step.trim();
+            if (!trimmedStep.isEmpty()) {
+                formattedSteps.append(trimmedStep).append("\n\n");
+            }
+        }
+        tvSteps.setText(formattedSteps.toString().trim());
+
+        btnBack.setOnClickListener(v -> finish());
     }
 
 }

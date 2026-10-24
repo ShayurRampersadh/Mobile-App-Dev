@@ -1,5 +1,6 @@
 package com.shayurrampersadh.smartpantrymanager.ui;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -11,20 +12,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.shayurrampersadh.smartpantrymanager.R;
 import com.shayurrampersadh.smartpantrymanager.data.PantryDao;
 import com.shayurrampersadh.smartpantrymanager.model.PantryItem;
+import com.shayurrampersadh.smartpantrymanager.util.IngredientNormalizer;
 
+import java.util.Calendar;
+import java.util.Locale;
 
 public class AddEditIngredientActivity extends AppCompatActivity {
-        public static final String EXTRA_ITEM_ID = "extra_item_id";
+    public static final String EXTRA_ITEM_ID = "extra_item_id";
 
-        private EditText etName, etQuantity, etUnit, etExpiry;
+    private EditText etName, etQuantity, etUnit, etExpiry;
 
-        private PantryDao pantryDao;
-        private int itemId = -1;
+    private PantryDao pantryDao;
+    private int itemId = -1;
 
     @Override
-    protected void onCreate (Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_add_edit_ingredient);
 
         pantryDao = new PantryDao(this);
@@ -34,19 +37,52 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         etUnit = findViewById(R.id.etUnit);
         etExpiry = findViewById(R.id.etExpiry);
         Button btnSave = findViewById(R.id.btnSave);
+        Button btnCancel = findViewById(R.id.btnCancel);
+
+        etExpiry.setFocusable(false);
+        etExpiry.setOnClickListener(v -> showDatePicker());
 
         itemId = getIntent().getIntExtra(EXTRA_ITEM_ID, -1);
 
-        if (itemId != -1){
+        if (itemId != -1) {
             loadExistingItem();
         }
+
         btnSave.setOnClickListener(view -> saveItem());
+        btnCancel.setOnClickListener(view -> finish());
     }
 
-    private void loadExistingItem(){
+    private void showDatePicker() {
+        Calendar calendar = Calendar.getInstance();
+        String existing = etExpiry.getText().toString().trim();
+
+        if (!existing.isEmpty()) {
+            try {
+                String[] parts = existing.split("-");
+                calendar.set(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]) - 1, Integer.parseInt(parts[2]));
+            } catch (Exception e) {
+                // fall back to today if the stored value can't be parsed
+            }
+        }
+
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    String formattedDate = String.format(Locale.getDefault(), "%04d-%02d-%02d",
+                            selectedYear, selectedMonth + 1, selectedDay);
+                    etExpiry.setText(formattedDate);
+                }, year, month, day);
+
+        datePickerDialog.show();
+    }
+
+    private void loadExistingItem() {
         PantryItem item = pantryDao.getById(itemId);
 
-        if(item != null){
+        if (item != null) {
             etName.setText(item.getName());
             etQuantity.setText(String.valueOf(item.getQuantity()));
             etUnit.setText(item.getUnit());
@@ -56,6 +92,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
 
     private void saveItem() {
         String name = etName.getText().toString().trim();
+        name = IngredientNormalizer.toTitleCase(name);
         String quantityStr = etQuantity.getText().toString().trim();
         String unit = etUnit.getText().toString().trim();
         String expiry = etExpiry.getText().toString().trim();

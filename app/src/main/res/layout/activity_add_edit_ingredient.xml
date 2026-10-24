@@ -38,22 +38,40 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
+        android:id="@+id/etExpiry"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:id="@+id/etExpiry"
-        android:hint="Expiry Date (YYYY-MM-DD)"
-        android:inputType="date"
+        android:hint="Expiry date (optional)"
+        android:focusable="false"
+        android:clickable="true"
         app:layout_constraintTop_toBottomOf="@id/etUnit"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/buttonRow"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:id="@+id/btnSave"
-        android:text="Save"
+        android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/etExpiry"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancel" />
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Save" />
+
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
