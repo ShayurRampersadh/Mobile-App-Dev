@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -115,15 +116,18 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
     }
 
     private void updateTabHighlight() {
+        int activeColor = ContextCompat.getColor(this, R.color.heading_red);
+        int inactiveColor = ContextCompat.getColor(this, R.color.button_red_light);
+
         if (showingSuggested) {
-            btnTabSuggested.setBackgroundColor(Color.parseColor("#2196F3"));
+            btnTabSuggested.setBackgroundColor(activeColor);
             btnTabSuggested.setTextColor(Color.WHITE);
-            btnTabAlmostThere.setBackgroundColor(Color.LTGRAY);
+            btnTabAlmostThere.setBackgroundColor(inactiveColor);
             btnTabAlmostThere.setTextColor(Color.BLACK);
         } else {
-            btnTabAlmostThere.setBackgroundColor(Color.parseColor("#2196F3"));
+            btnTabAlmostThere.setBackgroundColor(activeColor);
             btnTabAlmostThere.setTextColor(Color.WHITE);
-            btnTabSuggested.setBackgroundColor(Color.LTGRAY);
+            btnTabSuggested.setBackgroundColor(inactiveColor);
             btnTabSuggested.setTextColor(Color.BLACK);
         }
     }

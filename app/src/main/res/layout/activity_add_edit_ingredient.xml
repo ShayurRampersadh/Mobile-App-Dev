@@ -62,13 +62,17 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Cancel" />
+            android:text="Cancel"
+            android:backgroundTint="@color/button_red"
+            android:textColor="@color/white"/>
 
         <Button
             android:id="@+id/btnSave"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:backgroundTint="@color/button_red"
+            android:textColor="@color/white"
             android:text="Save" />
 
     </LinearLayout>

@@ -1,5 +1,7 @@
 package com.shayurrampersadh.smartpantrymanager.ui;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ import com.shayurrampersadh.smartpantrymanager.model.PantryItem;
 import com.shayurrampersadh.smartpantrymanager.util.IngredientNormalizer;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -64,6 +67,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
     @Override
     public void onBindViewHolder(@NonNull PantryViewHolder holder, int position) {
         PantryItem item = pantryItems.get(position);
+        Context context = holder.itemView.getContext();
 
         holder.tvItemName.setText(item.getName());
         holder.tvItemQuantity.setText(IngredientNormalizer.formatQuantity(item.getQuantity()) + " " + item.getUnit());
@@ -73,6 +77,9 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
             if (isExpired(expiryDate)) {
                 holder.tvItemExpiry.setText("Expired - was due " + expiryDate);
                 holder.tvItemExpiry.setTextColor(Color.RED);
+            } else if (isExpiringSoon(expiryDate, context)) {
+                holder.tvItemExpiry.setText("Expiring soon: " + expiryDate);
+                holder.tvItemExpiry.setTextColor(Color.parseColor("#E65100"));
             } else {
                 holder.tvItemExpiry.setText("Expires: " + expiryDate);
                 holder.tvItemExpiry.setTextColor(Color.DKGRAY);
@@ -83,7 +90,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
 
         holder.btnEdit.setOnClickListener(v -> listener.onEdit(item));
         holder.btnDelete.setOnClickListener(v -> {
-            new AlertDialog.Builder(holder.itemView.getContext())
+            new AlertDialog.Builder(context)
                     .setTitle("Delete item")
                     .setMessage("Are you sure you want to delete \"" + item.getName() + "\"?")
                     .setPositiveButton("Delete", (dialog, which) -> listener.onDelete(item))
@@ -95,6 +102,24 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
     private boolean isExpired(String expiryDate) {
         String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         return expiryDate.compareTo(today) < 0;
+    }
+
+    private boolean isExpiringSoon(String expiryDate, Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(SettingsActivity.PREFS_NAME, Context.MODE_PRIVATE);
+        boolean alertsEnabled = prefs.getBoolean(SettingsActivity.KEY_EXPIRY_ALERT, true);
+
+        if (!alertsEnabled) {
+            return false;
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String today = sdf.format(new Date());
+
+        Calendar threshold = Calendar.getInstance();
+        threshold.add(Calendar.DAY_OF_YEAR, 3);
+        String thresholdDate = sdf.format(threshold.getTime());
+
+        return expiryDate.compareTo(today) >= 0 && expiryDate.compareTo(thresholdDate) <= 0;
     }
 
     @Override

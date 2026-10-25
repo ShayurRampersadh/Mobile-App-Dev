@@ -39,12 +39,14 @@ public class NavigationHelper {
         navRecipes.setTextColor(Color.BLACK);
         navSettings.setTextColor(Color.BLACK);
 
+        int dimmedBlue = Color.parseColor("#1565C0");
+
         if (activity instanceof PantryListActivity) {
-            navPantry.setTextColor(Color.BLUE);
+            navPantry.setTextColor(dimmedBlue);
         } else if (activity instanceof SuggestedRecipesActivity) {
-            navRecipes.setTextColor(Color.BLUE);
+            navRecipes.setTextColor(dimmedBlue);
         } else if (activity instanceof SettingsActivity) {
-            navSettings.setTextColor(Color.BLUE);
+            navSettings.setTextColor(dimmedBlue);
         }
     }
 

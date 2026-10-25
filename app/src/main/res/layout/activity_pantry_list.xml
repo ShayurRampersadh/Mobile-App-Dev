@@ -25,6 +25,7 @@
         android:textSize="22sp"
         android:textStyle="bold"
         android:padding="12dp"
+        android:textColor="@color/heading_red"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -33,6 +34,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Add Item"
+        android:backgroundTint="@color/button_red"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@id/navBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -49,21 +52,27 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Pantry" />
+            android:text="Pantry"
+            android:backgroundTint="@color/button_red"
+            android:textColor="@color/white"/>
 
         <Button
             android:id="@+id/navRecipes"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Recipes" />
+            android:text="Recipes"
+            android:backgroundTint="@color/button_red"
+            android:textColor="@color/white"/>
 
         <Button
             android:id="@+id/navSettings"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Settings" />
+            android:text="Settings"
+            android:backgroundTint="@color/button_red"
+            android:textColor="@color/white"/>
 
     </LinearLayout>
 
