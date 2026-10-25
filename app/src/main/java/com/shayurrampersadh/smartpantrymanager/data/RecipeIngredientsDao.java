@@ -9,6 +9,12 @@ import com.shayurrampersadh.smartpantrymanager.model.RecipeIngredient;
 
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * Data Access Object for the recipe_ingredients table. This table has
+ * no primary key of its own — it's only ever queried BY recipe_id (one
+ * recipe has many ingredient rows), never by a row's own identity.
+ */
 public class RecipeIngredientsDao {
 
     private PantryDbHelper dbHelper;
@@ -17,6 +23,7 @@ public class RecipeIngredientsDao {
         dbHelper = new PantryDbHelper(context);
     }
 
+    /** Inserts one required-ingredient row for a recipe. Used only by DbSeeder. */
     public long insert(RecipeIngredient ingredient){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -32,6 +39,11 @@ public class RecipeIngredientsDao {
         return newId;
     }
 
+    /**
+     * Returns every ingredient a specific recipe requires. This is what
+     * RecipeMatcher calls for each recipe when checking it against the
+     * pantry.
+     */
     public List <RecipeIngredient> getIngredientForRecipe(int recipeId){
         List<RecipeIngredient> ingredients = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();

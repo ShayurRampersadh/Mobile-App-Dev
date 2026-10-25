@@ -1,5 +1,9 @@
 package com.shayurrampersadh.smartpantrymanager.model;
 
+/**
+ * Represents one row in the pantry_items table — a single ingredient
+ * the user currently has, with how much of it and when it expires.
+ */
 public class PantryItem {
 
     private int id;
@@ -36,6 +40,8 @@ public class PantryItem {
         return expiryDate;
     }
 
+    // No setId() — the id is assigned once by SQLite's AUTOINCREMENT and
+    // should never be reassigned on an existing object.
     public void setName(String name){
         this.name = name;
     }

@@ -17,6 +17,12 @@ import com.shayurrampersadh.smartpantrymanager.util.IngredientNormalizer;
 import java.util.Calendar;
 import java.util.Locale;
 
+/**
+ * Single form screen handling both add and edit. Mode is decided by
+ * whether EXTRA_ITEM_ID was passed in via Intent. Expiry is entered
+ * through a DatePickerDialog rather than typed, so an invalid date
+ * is impossible rather than merely validated against.
+ */
 public class AddEditIngredientActivity extends AppCompatActivity {
     public static final String EXTRA_ITEM_ID = "extra_item_id";
 
@@ -52,6 +58,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         btnCancel.setOnClickListener(view -> finish());
     }
 
+    /** Opens the system date picker, pre-filled with the existing date if one is set. */
     private void showDatePicker() {
         Calendar calendar = Calendar.getInstance();
         String existing = etExpiry.getText().toString().trim();
@@ -79,6 +86,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+    /** Edit mode: pre-fills the form with the item's current values. */
     private void loadExistingItem() {
         PantryItem item = pantryDao.getById(itemId);
 
@@ -92,6 +100,8 @@ public class AddEditIngredientActivity extends AppCompatActivity {
 
     private void saveItem() {
         String name = etName.getText().toString().trim();
+        // Normalised to Title Case so "milk" / "MILK" / "Milk" are treated
+        // as the same pantry item regardless of how the user typed it.
         name = IngredientNormalizer.toTitleCase(name);
         String quantityStr = etQuantity.getText().toString().trim();
         String unit = etUnit.getText().toString().trim();
@@ -120,6 +130,8 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         }
 
         if (itemId == -1) {
+            // Add mode: if an item with this exact (normalised) name already
+            // exists, merge quantities into it instead of creating a duplicate row.
             PantryItem existing = pantryDao.getByName(name);
 
             if (existing != null) {

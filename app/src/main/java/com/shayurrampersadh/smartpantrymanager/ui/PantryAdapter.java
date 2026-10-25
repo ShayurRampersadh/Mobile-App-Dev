@@ -23,6 +23,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * RecyclerView.Adapter for the pantry list. Displays each PantryItem as
+ * a row (item_pantry.xml), shows expired/expiring-soon status, and
+ * reports edit/delete taps back to PantryListActivity via the
+ * OnItemActionListener callback — this Adapter never talks to the
+ * database or launches any screen directly.
+ */
 public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryViewHolder> {
 
     private List<PantryItem> pantryItems;
@@ -39,12 +46,14 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
         this.listener = listener;
     }
 
+    /** Holds references to one row's views so findViewById only runs once per row. */
     static class PantryViewHolder extends RecyclerView.ViewHolder {
         TextView tvItemName;
         TextView tvItemQuantity;
         TextView tvItemExpiry;
         ImageButton btnEdit;
         ImageButton btnDelete;
+
 
         public PantryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -56,6 +65,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
         }
     }
 
+    // Inflates item_pantry.xml into a real View and wraps it in a ViewHolder.
     @NonNull
     @Override
     public PantryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -64,6 +74,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
         return new PantryViewHolder(view);
     }
 
+    // Fills one row's views with the data for the item at this position.
     @Override
     public void onBindViewHolder(@NonNull PantryViewHolder holder, int position) {
         PantryItem item = pantryItems.get(position);
@@ -99,11 +110,17 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
         });
     }
 
+    /** True if the expiry date (YYYY-MM-DD) is strictly before today. */
     private boolean isExpired(String expiryDate) {
         String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         return expiryDate.compareTo(today) < 0;
     }
 
+    /**
+     * True if the item expires within the next 3 days AND the Settings
+     * "expiring-soon alerts" toggle is on. Reads the same SharedPreferences
+     * key SettingsActivity writes to — no separate storage needed.
+     */
     private boolean isExpiringSoon(String expiryDate, Context context) {
         SharedPreferences prefs = context.getSharedPreferences(SettingsActivity.PREFS_NAME, Context.MODE_PRIVATE);
         boolean alertsEnabled = prefs.getBoolean(SettingsActivity.KEY_EXPIRY_ALERT, true);
@@ -119,6 +136,8 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
         threshold.add(Calendar.DAY_OF_YEAR, 3);
         String thresholdDate = sdf.format(threshold.getTime());
 
+        // String comparison works here because YYYY-MM-DD sorts identically
+        // whether compared as text or as real dates.
         return expiryDate.compareTo(today) >= 0 && expiryDate.compareTo(thresholdDate) <= 0;
     }
 

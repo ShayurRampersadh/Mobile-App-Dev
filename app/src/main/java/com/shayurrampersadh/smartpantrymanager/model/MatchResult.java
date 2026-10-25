@@ -2,6 +2,12 @@ package com.shayurrampersadh.smartpantrymanager.model;
 
 import java.util.List;
 
+/**
+ * This is the output of running the strict-matching rule against one recipe.
+ * Not a database row, built by RecipeMatcher at runtime. missingCount
+ * of 0 means the recipe is fully matched (Suggested); 1 means it
+ * belongs in the Almost There list.
+ */
 public class MatchResult {
 
     private Recipe recipe;

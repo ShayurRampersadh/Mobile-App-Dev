@@ -5,6 +5,11 @@ import android.content.Context;
 import com.shayurrampersadh.smartpantrymanager.model.Recipe;
 import com.shayurrampersadh.smartpantrymanager.model.RecipeIngredient;
 
+/**
+ * Seeds the recipes and recipe_ingredients tables with a fixed set of
+ * 17 recipes the first time the app runs. seedIfEmpty() guards against
+ * re-seeding on every launch by checking the recipe count first.
+ */
 public class DbSeeder {
 
     private RecipeDao recipeDao;
@@ -21,12 +26,16 @@ public class DbSeeder {
             return;
         }
 
+        //  Seeded recipe data
+        // each one seeds one recipe's name, prep steps, and required ingredients.
+
         seedRecipe("Scrambled Eggs on Toast",
                 "1. Whisk eggs. 2. Melt butter in a pan. 3. Cook eggs on low heat, stirring gently. 4. Toast bread. 5. Serve eggs on toast.",
                 new RecipeIngredient(0, "eggs", 2, "pcs"),
                 new RecipeIngredient(0, "bread", 2, "pcs"),
                 new RecipeIngredient(0, "butter", 10, "g")
         );
+
 
         seedRecipe(" Cheese Toast",
                 "1. Butter one side of each bread slice. 2. Place cheese between slices. 3. Grill in a pan on medium heat until golden and cheese melts.",
@@ -170,6 +179,16 @@ public class DbSeeder {
 
     }
 
+
+    /**
+     * Inserts one recipe and all of its required ingredients together.
+     * Varargs (RecipeIngredient...) lets each recipe list any number of
+     * ingredients without needing separate overloaded methods.
+     * The recipeId passed into each RecipeIngredient constructor in a
+     * seedRecipe(...) call is just a placeholder (0) — the REAL id,
+     * assigned by SQLite on insert, is substituted in below before the
+     * ingredient rows are actually written.
+     */
     private void seedRecipe(String name, String steps, RecipeIngredient... ingredients) {
         Recipe recipe = new Recipe(0, name, steps);
         long recipeId = recipeDao.insert(recipe);

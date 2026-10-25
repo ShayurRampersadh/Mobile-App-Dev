@@ -10,6 +10,12 @@ import com.shayurrampersadh.smartpantrymanager.model.PantryItem;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Access Object for the pantry_items table — the only class that
+ * talks to that table directly. Converts database rows into PantryItem
+ * objects (and back), so the rest of the app never deals with raw SQL
+ * or Cursors.
+ */
 public class PantryDao {
 
     private PantryDbHelper dbHelper;
@@ -18,6 +24,7 @@ public class PantryDao {
         dbHelper = new PantryDbHelper (context);
     }
 
+    /** Inserts a new pantry item and returns its auto-generated id. */
     public long insert(PantryItem item){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -32,6 +39,7 @@ public class PantryDao {
         return newId;
     }
 
+    /** Returns every pantry item currently stored, for the Pantry List screen. */
     public List<PantryItem> getAll(){
         List<PantryItem> items = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -46,6 +54,8 @@ public class PantryDao {
                 null
         );
 
+        // moveToFirst()/moveToNext() do-while is the standard way to read
+        // every row out of a Cursor.
         if (cursor.moveToFirst()){
             do {
                 int id = cursor.getInt(cursor.getColumnIndexOrThrow(PantryDbHelper.COL_PANTRY_ID));
@@ -63,6 +73,7 @@ public class PantryDao {
         return items;
     }
 
+    /** Updates an existing pantry item by its id. Returns rows affected (0 or 1). */
     public int update(PantryItem item){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -83,6 +94,7 @@ public class PantryDao {
         return rowsAffected;
     }
 
+    /** Deletes a pantry item by id. Returns rows affected (0 or 1). */
     public int delete(int id){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -96,6 +108,7 @@ public class PantryDao {
         return rowsAffected;
     }
 
+    /** Fetches one pantry item by id, or null if no row matches. Used when opening the edit form. */
     public PantryItem getById(int id){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         PantryItem item = null;
@@ -124,6 +137,11 @@ public class PantryDao {
         return item;
     }
 
+    /**
+     * Fetches a pantry item by its EXACT name (case-sensitive), or null
+     * if none exists. Used by AddEditIngredientActivity to decide whether
+     * adding an item should merge into an existing row or insert a new one.
+     */
     public PantryItem getByName(String name) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         PantryItem item = null;

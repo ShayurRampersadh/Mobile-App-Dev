@@ -2,7 +2,9 @@ package com.shayurrampersadh.smartpantrymanager.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,6 +20,12 @@ import com.shayurrampersadh.smartpantrymanager.util.NavigationHelper;
 
 import java.util.List;
 
+
+/**
+ * Launcher screen. Shows the pantry list (RecyclerView), seeds the
+ * recipe database on first run, and handles add/edit/delete via
+ * PantryAdapter's callback interface.
+ */
 public class PantryListActivity extends AppCompatActivity implements PantryAdapter.OnItemActionListener {
 
     private RecyclerView recyclerView;
@@ -50,7 +58,8 @@ public class PantryListActivity extends AppCompatActivity implements PantryAdapt
     }
 
 
-
+    // Runs every time this screen becomes visible again (including after
+    // returning from Add/Edit), so the list always reflects the latest data.
     @Override
     protected void onResume() {
         super.onResume();
@@ -61,6 +70,15 @@ public class PantryListActivity extends AppCompatActivity implements PantryAdapt
         pantryItems = pantryDao.getAll();
         adapter = new PantryAdapter(pantryItems, this);
         recyclerView.setAdapter(adapter);
+
+        TextView tvPantryEmptyState = findViewById(R.id.tvPantryEmptyState);
+        if (pantryItems.isEmpty()) {
+            recyclerView.setVisibility(View.GONE);
+            tvPantryEmptyState.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            tvPantryEmptyState.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -72,6 +90,8 @@ public class PantryListActivity extends AppCompatActivity implements PantryAdapt
 
     @Override
     public void onDelete(PantryItem item) {
+        // The confirmation dialog already happened in PantryAdapter —
+        // by the time this fires, the user has confirmed.
         pantryDao.delete(item.getId());
         loadPantryItems();
     }

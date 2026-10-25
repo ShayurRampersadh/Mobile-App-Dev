@@ -7,6 +7,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.shayurrampersadh.smartpantrymanager.R;
 import com.shayurrampersadh.smartpantrymanager.util.NavigationHelper;
 
+/**
+ * Settings screen. Holds one toggle (expiring-soon alerts), persisted
+ * with SharedPreferences rather than SQLite, since it's a single simple
+ * flag rather than structured, queryable data. PantryAdapter reads the
+ * same PREFS_NAME/KEY_EXPIRY_ALERT keys to decide whether to show the
+ * "Expiring soon" label on pantry items.
+ */
 public class SettingsActivity extends AppCompatActivity {
 
     public static final String PREFS_NAME = "SmartPantryPrefs";
@@ -20,6 +27,7 @@ public class SettingsActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         Switch switchExpiryAlert = findViewById(R.id.switchExpiryAlert);
 
+        // Defaults to true (alerts on) the very first time Settings is opened.
         boolean currentValue = prefs.getBoolean(KEY_EXPIRY_ALERT, true);
         switchExpiryAlert.setChecked(currentValue);
 

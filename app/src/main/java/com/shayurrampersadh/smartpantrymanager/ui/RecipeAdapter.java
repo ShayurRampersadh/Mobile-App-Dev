@@ -13,6 +13,12 @@ import com.shayurrampersadh.smartpantrymanager.model.MatchResult;
 
 import java.util.List;
 
+/**
+ * RecyclerView.Adapter for a list of recipe matching results. Reused
+ * for both the Suggested and Almost There tabs in SuggestedRecipesActivity
+ * Which list it shows depends only on what MatchResult list it's
+ * constructed with, not on any internal "mode" flag.
+ */
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
     private List<MatchResult> matchResults;

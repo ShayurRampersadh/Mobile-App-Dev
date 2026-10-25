@@ -25,6 +25,13 @@ import com.shayurrampersadh.smartpantrymanager.util.NavigationHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Runs the strict-matching rule against the current pantry and shows
+ * the results as two switchable tabs: Suggested (0 missing ingredients)
+ * and Almost There (exactly 1 missing). One RecyclerView swaps its
+ * dataset depending on which tab is active, rather than two separate
+ * permanently-visible lists.
+ */
 public class SuggestedRecipesActivity extends AppCompatActivity {
 
     private RecyclerView rvRecipes;
@@ -72,12 +79,15 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
         loadSuggestions();
     }
 
+    // Re-runs matching every time this screen becomes visible, so editing
+    // the pantry and coming back always shows up-to-date results.
     @Override
     protected void onResume() {
         super.onResume();
         loadSuggestions();
     }
 
+    /** Fetches pantry + recipes, runs the matcher, and splits results into the two tabs' lists. */
     private void loadSuggestions() {
         List<PantryItem> pantryItems = pantryDao.getAll();
         List<Recipe> allRecipes = recipeDao.getAll();
@@ -97,6 +107,7 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
         displayCurrentTab();
     }
 
+    /** Shows whichever list matches the active tab, plus its own empty-state message. */
     private void displayCurrentTab() {
         updateTabHighlight();
 
@@ -115,6 +126,7 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
         }
     }
 
+    /** Colors the active tab dark red, the inactive tab light red, so it's clear which is selected. */
     private void updateTabHighlight() {
         int activeColor = ContextCompat.getColor(this, R.color.heading_red);
         int inactiveColor = ContextCompat.getColor(this, R.color.button_red_light);

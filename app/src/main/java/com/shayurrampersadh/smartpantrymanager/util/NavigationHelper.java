@@ -10,6 +10,12 @@ import com.shayurrampersadh.smartpantrymanager.ui.PantryListActivity;
 import com.shayurrampersadh.smartpantrymanager.ui.SettingsActivity;
 import com.shayurrampersadh.smartpantrymanager.ui.SuggestedRecipesActivity;
 
+/**
+ * Shared bottom-navigation logic used by PantryListActivity,
+ * SuggestedRecipesActivity, and SettingsActivity — written once here
+ * instead of duplicated three times. Each Activity just calls
+ * setupNavBar(this) from onCreate().
+ */
 public class NavigationHelper {
 
     public static void setupNavBar(Activity activity) {
@@ -30,10 +36,14 @@ public class NavigationHelper {
         }
 
         Intent intent = new Intent(activity, targetActivity);
+        // Reuses an existing instance of the target screen instead of stacking
+        // a new one every time, so repeatedly switching tabs doesn't bloat the
+        // back stack (and pressing back doesn't cycle through every tab visited).
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         activity.startActivity(intent);
     }
 
+    /** Colors the button matching the Activity you're currently on; resets the other two. */
     private static void highlightCurrentTab(Activity activity, Button navPantry, Button navRecipes, Button navSettings) {
         navPantry.setTextColor(Color.BLACK);
         navRecipes.setTextColor(Color.BLACK);

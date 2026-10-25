@@ -1,5 +1,10 @@
 package com.shayurrampersadh.smartpantrymanager.model;
 
+/**
+ * Represents one required ingredient for a recipe — one row in the
+ * recipe_ingredients table. A single recipe has many of these, one
+ * per ingredient it needs. recipeId is the foreign key back to recipes.id.
+ */
 public class RecipeIngredient {
 
     private int recipeId;

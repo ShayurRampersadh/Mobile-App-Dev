@@ -1,5 +1,10 @@
 package com.shayurrampersadh.smartpantrymanager.model;
 
+/**
+ * Represents one row in the recipes table — a recipe's name and its
+ * prep steps. The actual required ingredients live in a separate
+ * RecipeIngredient list, fetched via RecipeIngredientsDao.
+ */
 public class Recipe {
 
     private int id;
